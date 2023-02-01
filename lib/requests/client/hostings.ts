@@ -1,11 +1,11 @@
 import { IAuth } from '../../interfaces'
-import { makeGetRequest } from '../../helper'
+import { queryBuilder, makeGetRequest } from '../../helper'
 
 /**
- * This class is used to make authenticated "Client Domains" requests
+ * This class is used to make authenticated "Client Hostings" requests
  */
 export default class {
-  protected api_url: String = "https://api.pph.sh/client/domains"
+  protected api_url: String = "https://api.pph.sh/client/hostings"
   protected auth: IAuth
 
   constructor(auth: IAuth) {
@@ -33,17 +33,17 @@ export default class {
     return [result, null]
   }
 
-  public async all(): Promise<[JSON | null, Object | null]> {
-    return this._get(null)
+  /**
+   * @param status String
+   * @param active Boolean
+   * @param ip String
+   * @param password Boolean
+   */
+  public async all(querys: JSON | null = null): Promise<[JSON | null, Object | null]> {
+    let url = ""
+    if (querys !== null) {
+      url += queryBuilder(querys)
+    }
+    return this._get(url)
   }
-
-  public async single(id: Number): Promise<[JSON | null, Object | null]> {
-    return this._get(id)
-  }
-
-  public async invoices(id: Number): Promise<[JSON | null, Object | null]> {
-    return this._get(`${id}/invoices`)
-  }
-
-  /* STOPPED HERE DUE TO API BUG */
 }

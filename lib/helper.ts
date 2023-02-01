@@ -9,3 +9,17 @@ export async function makeGetRequest(url: String, token: String, lang: String | 
     }
   })
 }
+
+export function queryBuilder(querys: JSON): String {
+  let result: String = "?"
+  let first_query: Boolean = true
+  Object.entries(querys).forEach(([key, value]) => {
+    if (first_query === true) {
+      first_query = false
+    } else {
+      result += '&'
+    }
+    result += `${key}=${value}`
+  })
+  return result
+}

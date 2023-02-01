@@ -1,12 +1,14 @@
 import { IAuth } from './interfaces'
 //import CDomains from './requests/domains'
 import CDomains from './requests/client/domains'
+import CHostings from './requests/client/hostings'
 
 class CClient {
   /**
    * Used to make authenticated "Client Domains" requests
    */
   domains: CDomains
+  hostings: CHostings
   
   constructor(auth: IAuth) {
     if (!auth) {
@@ -14,6 +16,7 @@ class CClient {
     }
 
     this.domains = new CDomains(auth)
+    this.hostings = new CHostings(auth)
   }
 }
 
