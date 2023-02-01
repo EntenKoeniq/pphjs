@@ -34,10 +34,10 @@ export default class {
   }
 
   /**
-   * @param status String
-   * @param active Boolean
-   * @param ip String
-   * @param password Boolean
+   * @param status String | null
+   * @param active Boolean | null
+   * @param ip String | null
+   * @param password Boolean | null
    */
   public async all(querys: JSON | null = null): Promise<[JSON | null, Object | null]> {
     let url = ""
@@ -47,14 +47,24 @@ export default class {
     return this._req(url, "GET")
   }
 
+  /**
+   * @param id Number
+   */
   public async details(id: Number): Promise<[JSON | null, Object | null]> {
     return this._req(id, "GET")
   }
 
+  /**
+   * @param id Number
+   */
   public async invoices(id: Number): Promise<[JSON | null, Object | null]> {
     return this._req(`${id}/invoices`, "GET")
   }
 
+  /**
+   * @param id Number
+   * @param apply Boolean
+   */
   public async upgrade(id: Number, apply: Boolean): Promise<[JSON | null, Object | null]> {
     let url = `${id}/upgrade`
     if (apply === true) {
@@ -63,34 +73,50 @@ export default class {
     return this._req(url, "POST")
   }
 
+  /**
+   * @param id Number
+   * @param method String | null
+   * @param querys JSON | null
+   */
   public async cancellation(id: Number, method: String | null = null, querys: JSON | null = null): Promise<[JSON | null, Object | null]> {
     let url = `${id}/cancellation`
     switch (method) {
       case "refund":
-        return this._req(`${id}/cancellation/refund`, "POST")
+        return this._req(`${url}/refund`, "POST")
       case "create":
         if (querys === null) {
           return [null, { status: 0, msg: "missing_querys", error: null }]
         }
 
-        url += '/' + queryBuilder(querys)
+        url += "/create" + queryBuilder(querys)
 
         return this._req(url, "POST")
       case "revoke":
-        return this._req(`${id}/cancellation/revoke`, "POST")
+        return this._req(`${url}/revoke`, "POST")
       default:
-        return this._req(`${id}/cancellation`, "GET")
+        return this._req(url, "GET")
     }
   }
 
+  /**
+   * @param id Number
+   */
   public async features(id: Number): Promise<[JSON | null, Object | null]> {
     return this._req(`${id}/features`, "GET")
   }
 
+  /**
+   * @param id Number
+   */
   public async actions(id: Number): Promise<[JSON | null, Object | null]> {
     return this._req(`${id}/actions`, "GET")
   }
 
+  /**
+   * @param id Number
+   * @param action String
+   * @param querys JSON | null
+   */
   public async action(id: Number, action: String, querys: JSON | null = null): Promise<[JSON | null, Object | null]> {
     let url = `${id}/actions/handle/${action}`
     if (querys !== null) {
