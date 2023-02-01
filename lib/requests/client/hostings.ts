@@ -82,7 +82,7 @@ export default class {
     let url = `${id}/cancellation`
     switch (method) {
       case "refund":
-        return this._req(`${url}/refund`, "POST")
+        return this._req(`${url}/refund`, "GET")
       case "create":
         if (querys === null) {
           return [null, { status: 0, msg: "missing_querys", error: null }]
