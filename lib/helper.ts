@@ -1,6 +1,6 @@
-export async function makeGetRequest(url: String, token: String, lang: String | null): Promise<Response> {
+export async function makeRequest(url: String, method: string, token: String, lang: String | null): Promise<Response> {
   return await fetch(`${url}`, {
-    method: "GET",
+    method: method,
     headers: {
       "Authorization": `Bearer ${token}`,
       "Content-Type": "application/json",

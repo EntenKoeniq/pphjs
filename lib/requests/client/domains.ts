@@ -1,5 +1,5 @@
 import { IAuth } from '../../interfaces'
-import { makeGetRequest } from '../../helper'
+import { makeRequest } from '../../helper'
 
 /**
  * This class is used to make authenticated "Client Domains" requests
@@ -20,7 +20,7 @@ export default class {
     let response: Response
     let result: JSON
     try {
-      response = await makeGetRequest(`${url}`, this.auth.token, this.auth.lang)
+      response = await makeRequest(url, "GET", this.auth.token, this.auth.lang)
     } catch (e) {
       return [null, { status: 0, msg: "request_failed", error: e }]
     }
