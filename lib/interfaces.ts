@@ -7,7 +7,7 @@ export interface IAuth {
   token: string,
   /**
    * The preferred language.
-   * Supported; `de` and `en`
+   * Supported: `de` and `en`
    */
   lang: ELang
 }

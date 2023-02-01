@@ -1,4 +1,4 @@
 export enum ELang {
-  DE = "de",
-  EN = "en"
+  EN = "en",
+  DE = "de"
 }

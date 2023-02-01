@@ -1,4 +1,5 @@
-import { IAuth } from './../interfaces'
+import { IAuth } from '../interfaces'
+import { makeGetRequest } from '../helper'
 
 /**
  * This class is used to make "Domains" requests
@@ -19,14 +20,7 @@ export class CDomains {
     let response: Response
     let result: JSON
     try {
-      response = await fetch(`${this.api_url}/whois-servers`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          "Accept": "application/json",
-          "Accept-Language": `${this.auth.lang}`
-        }
-      })
+      response = await makeGetRequest(`${this.api_url}/whois-servers`, this.auth.token, this.auth.lang)
     } catch (e) {
       return [null, { status: 0, msg: "request_failed", error: e }]
     }

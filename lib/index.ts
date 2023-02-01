@@ -1,7 +1,7 @@
 import { IAuth } from './interfaces'
 import { CDomains } from './requests/domains'
 
-export class CClient {
+class CClient {
   /**
    * Used to make "Domains" requests
    */
