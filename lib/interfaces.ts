@@ -1,5 +1,3 @@
-import { ELang } from "./enums"
-
 export interface IAuth {
   /**
    * This is the authentication token for requests
@@ -9,5 +7,5 @@ export interface IAuth {
    * The preferred language.
    * Supported: `de` and `en`
    */
-  lang: ELang
+  lang: String
 }
