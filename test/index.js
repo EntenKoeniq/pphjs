@@ -1,10 +1,10 @@
-require('dotenv').config
+require('dotenv').config()
 const pph = require('../')
 
 const client = pph.createClient({ token: process.env.TOKEN, lang: process.env.LANGUAGE })
 
 async function main() {
-  const [ servers, error ] = await client.domains.whoisServers("de")
+  const [ servers, error ] = await client.domains.all()
   if (error !== null) {
     console.error(error)
   } else {

@@ -4,7 +4,7 @@ import { makeGetRequest } from '../helper'
 /**
  * This class is used to make "Domains" requests
  */
-export class CDomains {
+export default class CDomains {
   protected api_url: String = "https://api.pph.sh/public/domains"
   protected auth: IAuth
 
