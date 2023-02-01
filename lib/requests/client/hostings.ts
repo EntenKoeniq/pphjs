@@ -12,7 +12,7 @@ export default class {
     this.auth = auth
   }
 
-  async _get(url_ending: String | Number | null = null): Promise<[JSON | null, Object | null]> {
+  async _req(url_ending: String | Number | null = null, method: String): Promise<[JSON | null, Object | null]> {
     let url: String = this.api_url
     if (url_ending !== null) {
       url += `/${url_ending}`
@@ -20,28 +20,7 @@ export default class {
     let response: Response
     let result: JSON
     try {
-      response = await makeRequest(url, "GET", this.auth.token, this.auth.lang)
-    } catch (e) {
-      return [null, { status: 0, msg: "request_failed", error: e }]
-    }
-
-    if (response.status !== 200) {
-      return [null, { status: response.status, msg: "wrong_status", error: null }]
-    }
-
-    result = await response.json()
-    return [result, null]
-  }
-
-  async _post(url_ending: String | Number | null = null): Promise<[JSON | null, Object | null]> {
-    let url: String = this.api_url
-    if (url_ending !== null) {
-      url += `/${url_ending}`
-    }
-    let response: Response
-    let result: JSON
-    try {
-      response = await makeRequest(url, "POST", this.auth.token, this.auth.lang)
+      response = await makeRequest(url, method, this.auth.token, this.auth.lang)
     } catch (e) {
       return [null, { status: 0, msg: "request_failed", error: e }]
     }
@@ -65,15 +44,15 @@ export default class {
     if (querys !== null) {
       url += queryBuilder(querys)
     }
-    return this._get(url)
+    return this._req(url, "GET")
   }
 
   public async details(id: Number): Promise<[JSON | null, Object | null]> {
-    return this._get(id)
+    return this._req(id, "GET")
   }
 
   public async invoices(id: Number): Promise<[JSON | null, Object | null]> {
-    return this._get(`${id}/invoices`)
+    return this._req(`${id}/invoices`, "GET")
   }
 
   public async upgrade(id: Number, apply: Boolean): Promise<[JSON | null, Object | null]> {
@@ -81,14 +60,14 @@ export default class {
     if (apply === true) {
       url += "/do"
     }
-    return this._post(url)
+    return this._req(url, "POST")
   }
 
   public async cancellation(id: Number, method: String | null = null, querys: JSON | null = null): Promise<[JSON | null, Object | null]> {
     let url = `${id}/cancellation`
     switch (method) {
       case "refund":
-        return this._get(`${id}/cancellation/refund`)
+        return this._req(`${id}/cancellation/refund`, "POST")
       case "create":
         if (querys === null) {
           return [null, { status: 0, msg: "missing_querys", error: null }]
@@ -96,24 +75,20 @@ export default class {
 
         url += '/' + queryBuilder(querys)
 
-        return this._post(url)
+        return this._req(url, "POST")
       case "revoke":
-        return this._post(`${id}/cancellation/revoke`)
+        return this._req(`${id}/cancellation/revoke`, "POST")
       default:
-        return this._get(`${id}/cancellation`)
+        return this._req(`${id}/cancellation`, "GET")
     }
   }
 
-  public async cancellationInfo(id: Number): Promise<[JSON | null, Object | null]> {
-    return this._get(`${id}/cancellation/refund`)
-  }
-
   public async features(id: Number): Promise<[JSON | null, Object | null]> {
-    return this._get(`${id}/features`)
+    return this._req(`${id}/features`, "GET")
   }
 
   public async actions(id: Number): Promise<[JSON | null, Object | null]> {
-    return this._get(`${id}/actions`)
+    return this._req(`${id}/actions`, "GET")
   }
 
   public async action(id: Number, action: String, querys: JSON | null = null): Promise<[JSON | null, Object | null]> {
@@ -125,9 +100,9 @@ export default class {
       case "reboot":
       case "stop-server":
       case "start-server":
-        return this._post(url)
+        return this._req(url, "POST")
       default:
-        return this._get(url)
+        return this._req(url, "GET")
     }
   }
 }
