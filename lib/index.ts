@@ -3,16 +3,23 @@ import { IAuth } from './interfaces'
 import CDomains from './requests/client/domains'
 import CHostings from './requests/client/hostings'
 
+const SUPPORTED_LANGUAGES: Array<String> = [
+  "de",
+  "en"
+]
+
 class CClient {
-  /**
-   * Used to make authenticated "Client Domains" requests
-   */
   domains: CDomains
   hostings: CHostings
   
   constructor(auth: IAuth) {
-    if (!auth) {
-      throw new Error('Missing authentication.')
+    if (typeof auth.token === 'undefined') {
+      throw new Error('Missing authentication')
+    }
+    if (typeof auth.lang === 'undefined') {
+      auth.lang = "en"
+    } else if (SUPPORTED_LANGUAGES.includes(`${auth.lang.toLocaleLowerCase()}`) === false) {
+      throw new Error('This language is not supported')
     }
 
     this.domains = new CDomains(auth)

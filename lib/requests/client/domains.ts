@@ -12,7 +12,7 @@ export default class {
     this.auth = auth
   }
 
-  async _get(url_ending: String | Number | null = null): Promise<[JSON | null, Object | null]> {
+  async _req(url_ending: String | Number | null = null, method: String): Promise<[JSON | null, Object | null]> {
     let url: String = this.api_url
     if (url_ending !== null) {
       url += `/${url_ending}`
@@ -20,7 +20,7 @@ export default class {
     let response: Response
     let result: JSON
     try {
-      response = await makeRequest(url, "GET", this.auth.token, this.auth.lang)
+      response = await makeRequest(url, method, this.auth.token, this.auth.lang)
     } catch (e) {
       return [null, { status: 0, msg: "request_failed", error: e }]
     }
@@ -34,15 +34,15 @@ export default class {
   }
 
   public async all(): Promise<[JSON | null, Object | null]> {
-    return this._get(null)
+    return this._req(null, "GET")
   }
 
   public async single(id: Number): Promise<[JSON | null, Object | null]> {
-    return this._get(id)
+    return this._req(id, "GET")
   }
 
   public async invoices(id: Number): Promise<[JSON | null, Object | null]> {
-    return this._get(`${id}/invoices`)
+    return this._req(`${id}/invoices`, "GET")
   }
 
   /* STOPPED HERE DUE TO API BUG */

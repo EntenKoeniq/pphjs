@@ -40,9 +40,9 @@ export default class {
    * @param password Boolean | null
    */
   public async all(querys: JSON | null = null): Promise<[JSON | null, Object | null]> {
-    let url = ""
+    let url: String | null = null
     if (querys !== null) {
-      url += queryBuilder(querys)
+      url = queryBuilder(querys)
     }
     return this._req(url, "GET")
   }
