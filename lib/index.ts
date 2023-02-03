@@ -1,7 +1,7 @@
 import { IAuth } from './interfaces'
 //import CDomains from './requests/domains'
 import CDomains from './requests/client/domains'
-import CHostings from './requests/client/hostings'
+import CHosting from './requests/client/hosting'
 
 const SUPPORTED_LANGUAGES: Array<String> = [
   "de",
@@ -10,7 +10,7 @@ const SUPPORTED_LANGUAGES: Array<String> = [
 
 class CClient {
   domains: CDomains
-  hostings: CHostings
+  hosting: CHosting
   
   constructor(auth: IAuth) {
     if (typeof auth.token === 'undefined') {
@@ -23,7 +23,7 @@ class CClient {
     }
 
     this.domains = new CDomains(auth)
-    this.hostings = new CHostings(auth)
+    this.hosting = new CHosting(auth)
   }
 }
 
