@@ -18,28 +18,26 @@ export default class {
       url += `/${url_ending}`
     }
     let response: Response
-    let result: JSON
+    let result: JSON | null = null
     try {
       response = await makeRequest(url, method, this.auth.token, this.auth.lang)
+      result = await response.json()
     } catch (e) {
-      return [null, { status: 0, msg: "request_failed", error: e }]
+      return [null, { status: 0, msg: "request_failed", body: result, error: e }]
     }
 
     if (response.status !== 200) {
-      return [null, { status: response.status, msg: "wrong_status", error: null }]
+      return [null, { status: response.status, msg: "wrong_status", body: result, error: null }]
     }
 
-    result = await response.json()
     return [result, null]
   }
 
   /**
-   * @param status String | null
-   * @param active Boolean | null
-   * @param ip String | null
-   * @param password Boolean | null
+   * Check out the [API](https://fsn-01.api.pph.sh/new-docs/client-hosting.html#list-hostings) for more details.
+   * @param querys Array<String> | null: **Example** `["active=true"]`
    */
-  public async all(querys: JSON | null = null): Promise<[JSON | null, Object | null]> {
+  public async all(querys: Array<String> | null = null): Promise<[JSON | null, Object | null]> {
     let url: String | null = null
     if (querys !== null) {
       url = queryBuilder(querys)
@@ -48,6 +46,7 @@ export default class {
   }
 
   /**
+   * Check out the [API](https://fsn-01.api.pph.sh/new-docs/client-hosting.html#hosting-details) for more details.
    * @param id Number
    */
   public async details(id: Number): Promise<[JSON | null, Object | null]> {
@@ -55,6 +54,7 @@ export default class {
   }
 
   /**
+   * Check out the [API](https://fsn-01.api.pph.sh/new-docs/client-hosting.html#hosting-invoices) for more details.
    * @param id Number
    */
   public async invoices(id: Number): Promise<[JSON | null, Object | null]> {
@@ -62,6 +62,9 @@ export default class {
   }
 
   /**
+   * Check out the [API](https://fsn-01.api.pph.sh/new-docs/client-hosting.html#hosting-config-change) for more details.
+   * 
+   * Check out the [API](https://fsn-01.api.pph.sh/new-docs/client-hosting.html#apply-hosting-config-change) for more details.
    * @param id Number
    * @param apply Boolean
    */
@@ -74,11 +77,18 @@ export default class {
   }
 
   /**
+   * Check out the [API](https://fsn-01.api.pph.sh/new-docs/client-hosting.html#get-cancellation) for more details.
+   * 
+   * Check out the [API](https://fsn-01.api.pph.sh/new-docs/client-hosting.html#immediate-cancellation-info) for more details.
+   * 
+   * Check out the [API](https://fsn-01.api.pph.sh/new-docs/client-hosting.html#create-a-cancellation) for more details.
+   * 
+   * Check out the [API](https://fsn-01.api.pph.sh/new-docs/client-hosting.html#revoke-cancellation) for more details.
    * @param id Number
-   * @param method String | null
-   * @param querys JSON | null
+   * @param method String | null: `refund`, `create`, `revoke` or `null`
+   * @param querys Array<String> | null: **Example** `["immediate=true"]`
    */
-  public async cancellation(id: Number, method: String | null = null, querys: JSON | null = null): Promise<[JSON | null, Object | null]> {
+  public async cancellation(id: Number, method: String | null = null, querys: Array<String> | null = null): Promise<[JSON | null, Object | null]> {
     let url = `${id}/cancellation`
     switch (method) {
       case "refund":
@@ -99,6 +109,7 @@ export default class {
   }
 
   /**
+   * Check out the [API](https://fsn-01.api.pph.sh/new-docs/client-hosting.html#get-hosting-features) for more details.
    * @param id Number
    */
   public async features(id: Number): Promise<[JSON | null, Object | null]> {
@@ -106,6 +117,7 @@ export default class {
   }
 
   /**
+   * Check out the [API](https://fsn-01.api.pph.sh/new-docs/client-hosting.html#get-hosting-actions) for more details.
    * @param id Number
    */
   public async actions(id: Number): Promise<[JSON | null, Object | null]> {
@@ -113,15 +125,17 @@ export default class {
   }
 
   /**
+   * Check out the [API](https://fsn-01.api.pph.sh/new-docs/client-hosting.html#execute-an-action-on-the-hosting) for more details.
    * @param id Number
-   * @param action String
-   * @param querys JSON | null
+   * @param action String: `reboot`, `stop-server`, `start-server`, `available-updates`, `backups`, `stats_history`, `ping`, `status`, `traffic`, `live` or `configuration`
+   * @param querys Array<String> | null: **Example** `["methods=cpu-usage"]`
    */
-  public async action(id: Number, action: String, querys: JSON | null = null): Promise<[JSON | null, Object | null]> {
+  public async action(id: Number, action: String, querys: Array<String> | null = null): Promise<[JSON | null, Object | null]> {
     let url = `${id}/actions/handle/${action}`
     if (querys !== null) {
       url += queryBuilder(querys)
     }
+    console.log(url)
     switch (action) {
       case "reboot":
       case "stop-server":

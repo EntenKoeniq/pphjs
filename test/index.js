@@ -4,7 +4,7 @@ const pph = require('../')
 const client = pph.createClient({ token: process.env.TOKEN, lang: process.env.LANGUAGE })
 
 async function main() {
-  const [ servers, error ] = await client.hostings.cancellation(41390, "refund")
+  const [ servers, error ] = await client.hostings.action(41902, "live", ["methods=cpu-usage"])
   if (error !== null) {
     console.error(error)
   } else {
